@@ -52,10 +52,15 @@ namespace geometry_shapes
             debugStr += "\nMouseRightButtonDown";
             Ellipse currEl = (Ellipse)sender;
             textLabel.Content = "clicled for drawing[" + curr.X + "." + curr.Y + "]";
-            var x2 = Canvas.GetTop(currEl);
-            var y2 = Canvas.GetTop(selectedEllipseForLine);
             var x1 = Canvas.GetLeft(currEl);
-            var y1 = Canvas.GetLeft(selectedEllipseForLine);
+            var y1 = Canvas.GetTop(currEl);
+            var x2 = Canvas.GetLeft(selectedEllipseForLine);
+            var y2 = Canvas.GetTop(selectedEllipseForLine);
+            /*myLine.X1 =  x1;
+              myLine.X2 =  y1;
+              myLine.Y1 =  x2;
+              myLine.Y2 =  y2;*/
+
             //double x1, double y1, double x2, double y2
             DrawLineBetweenCoordinates(x1, y1, x2, y2);
         }
@@ -179,10 +184,9 @@ namespace geometry_shapes
             Line myLine = new Line();
 
             myLine.Stroke = System.Windows.Media.Brushes.Black;
-            //if change this to numbers - it works
             myLine.X1 =  x1;
-            myLine.X2 =  x2;
-            myLine.Y1 =  y1;
+            myLine.X2 =  y1;
+            myLine.Y1 =  x2;
             myLine.Y2 =  y2;
             /*myLine.HorizontalAlignment = HorizontalAlignment.Left;
             myLine.VerticalAlignment = VerticalAlignment.Center;*/
@@ -194,21 +198,10 @@ namespace geometry_shapes
         }
         private void DrawLineBetweenEllipses(ref Ellipse el1 ,ref Ellipse el2)/* , ref Canvas canvas)*/
         {
-//            if (el1 == el2) return;//throw exception blah-blah
             debugStr += "\nEntered DrawLine";
             Line myLine = new Line();
-            /*if (outerLine1 == null)
-            {//saves reference to connected Line
-                outerLine1 = myLine;
-                debugStr += "\nOuterLine1";
-            }
-            else
-            {
-                outerLine2 = myLine;
-                debugStr += "\nOuterLine2";
-            }*/
+
             myLine.Stroke = System.Windows.Media.Brushes.Black;
-            //if change this to numbers - it works
             myLine.X1 = (int)(Canvas.GetLeft(el1) + 25.0);
             myLine.X2 = (int)(Canvas.GetLeft(el2) + 25.0); 
             myLine.Y1 = (int)(Canvas.GetTop(el1) + 25.0);
@@ -224,7 +217,6 @@ namespace geometry_shapes
         {
             string coords = "defaultc coords!";
 
-            //coords = "";
             coords = "\nWidth:" + _width.ToString() + " Height:" + _height.ToString() + 
                      "\nBeginY:" + begin.Y.ToString() + " BeginX:" + begin.X.ToString() + 
                      "\nCurrY:" + curr.Y.ToString() + " CurrX:" + curr.X.ToString();
@@ -232,9 +224,6 @@ namespace geometry_shapes
         }
         public string getLines()
         {
-            //string answer = "";
-            //answer += outerLine1.ToString();
-            //answer += outerLine2.ToString();
             return debugStr;
         }
     }
