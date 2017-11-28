@@ -198,7 +198,7 @@ namespace geometry_shapes
         }
         private void DrawLineBetweenEllipses(ref Ellipse el1 ,ref Ellipse el2)/* , ref Canvas canvas)*/
         {
-            debugStr += "\nEntered DrawLine";
+            /*debugStr += "\nEntered DrawLine";
             Line myLine = new Line();
 
             myLine.Stroke = System.Windows.Media.Brushes.Black;
@@ -211,7 +211,7 @@ namespace geometry_shapes
             myLine.StrokeThickness = 2;
 
             myLine.UpdateLayout();
-            debugStr += "\nChildren.Add!";
+            debugStr += "\nChildren.Add!";*/
         }
         public string ellipseCoords()
         {
