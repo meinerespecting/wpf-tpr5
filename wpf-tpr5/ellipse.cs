@@ -53,10 +53,10 @@ namespace geometry_shapes
             Ellipse currEl = (Ellipse)sender;//clicking on some else figure will make it marked
             /*if (selectedEllipseForLine == null) selectedEllipseForLine = buf;*/
             textLabel.Content = "clicled for drawing[" + curr.X + "." + curr.Y + "]";
-            double x1 = 50;//Canvas.GetLeft(currEl);
-            double x2 = 150;//Canvas.GetLeft(selectedEllipseForLine);
-            double y1 = 50;//Canvas.GetTop(currEl);
-            double y2 = 150;//Canvas.GetTop(selectedEllipseForLine);
+            var x1 = Canvas.GetTop(currEl);
+            var y1 = Canvas.GetTop(selectedEllipseForLine);
+            var x2 = Canvas.GetLeft(currEl);
+            var y2 = Canvas.GetLeft(selectedEllipseForLine);
             //DrawLineBetweenEllipses(ref currEl , ref selectedEllipseForLine /*, ref currentCanvas*/);
             DrawLineBetweenCoordinates(x1, y1, x2, y2);
         }
@@ -181,13 +181,14 @@ namespace geometry_shapes
 
             myLine.Stroke = System.Windows.Media.Brushes.Black;
             //if change this to numbers - it works
-            myLine.X1 = 50;//x1;
-            myLine.X2 = 150;// x2;
-            myLine.Y1 = 50;// y1;
-            myLine.Y2 = 150;// y2;
+            myLine.X1 =  x1;
+            myLine.X2 =  x2;
+            myLine.Y1 =  y1;
+            myLine.Y2 =  y2;
             myLine.HorizontalAlignment = HorizontalAlignment.Left;
             myLine.VerticalAlignment = VerticalAlignment.Center;
             myLine.StrokeThickness = 2;
+            currentCanvas.Children.Add(myLine);
 
             myLine.UpdateLayout();
             debugStr += "\nChildren.Add!";
