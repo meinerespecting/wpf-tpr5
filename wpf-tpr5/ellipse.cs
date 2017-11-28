@@ -50,15 +50,14 @@ namespace geometry_shapes
         private new void MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             debugStr += "\nMouseRightButtonDown";
-            Ellipse currEl = (Ellipse)sender;//clicking on some else figure will make it marked
-            /*if (selectedEllipseForLine == null) selectedEllipseForLine = buf;*/
+            Ellipse currEl = (Ellipse)sender;
             textLabel.Content = "clicled for drawing[" + curr.X + "." + curr.Y + "]";
             var x2 = Canvas.GetTop(currEl);
             var y2 = Canvas.GetTop(selectedEllipseForLine);
             var x1 = Canvas.GetLeft(currEl);
             var y1 = Canvas.GetLeft(selectedEllipseForLine);
-            //DrawLineBetweenEllipses(ref currEl , ref selectedEllipseForLine /*, ref currentCanvas*/);
-            DrawLineBetweenCoordinates(x2, y1, x1, y2);
+            //double x1, double y1, double x2, double y2
+            DrawLineBetweenCoordinates(x1, y1, x2, y2);
         }
         private new void MouseMove(object sender, MouseEventArgs e)
         {
