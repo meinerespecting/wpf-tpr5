@@ -21,41 +21,19 @@ namespace wpf_tpr5
     /// </summary>
     public partial class MainWindow : Window
     {
-        geometry_circle currentFigure;
-
-        List<geometry_circle> mEllipses = new List<geometry_circle>();
-        List<Line> myLines = new List<Line>();
-        // The current drawing ellipse
+        geometry_controller GlobalGeometryController = null;
         public MainWindow()
         {
             InitializeComponent();
-            canvasMain.MouseLeftButtonUp += Ellipse_MouseLeftButonUp;
+            //canvasMain.MouseLeftButtonUp += Ellipse_MouseLeftButonUp;
+            GlobalGeometryController = new geometry_controller(50 , 50 , 30 , 30 , circleNameTextBox.Text , ref canvasMain);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            geometry_circle C = new geometry_circle(50, 50, 30, 30, circleNameTextBox.Text, ref canvasMain);
-
-            mEllipses.Add(C);
-            currentFigure = C;
-
-            debugTextBox.AppendText("\nAdded element!");
+            GlobalGeometryController.addNewFigure();
         }
-        /*private void DrawLineBetween(Ellipse el1, Ellipse el2, ref Canvas canvas)
-        {
-            Line myLine = new Line();
-            myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
-            myLine.X1 = Canvas.GetLeft(el1) + 25;
-            myLine.X2 = Canvas.GetLeft(el2) + 25; ;
-            myLine.Y1 = Canvas.GetTop(el1) + 25;
-            myLine.Y2 = Canvas.GetTop(el2) + 25;
-            myLine.HorizontalAlignment = HorizontalAlignment.Left;
-            myLine.VerticalAlignment = VerticalAlignment.Center;
-            myLine.StrokeThickness = 2;
-           
 
-            canvas.Children.Add(myLine);
-        }*/
         private void Ellipse_MouseLeftButonUp(object sender, MouseButtonEventArgs e)
         {
             debugTextBox.AppendText("\nX:"+e.GetPosition(this).X + " Y:" + e.GetPosition(this).Y);
@@ -63,9 +41,7 @@ namespace wpf_tpr5
 
         private void button_Click_1(object sender, RoutedEventArgs e)
         {
-            debugTextBox.AppendText(currentFigure.getLines());
-            /*if(mEllipses.Count > 0) debugTextBox.AppendText("\nC.handlerWork : " + mEllipses.Last().handlerWork);
-            if(currentFigure != null)debugTextBox.AppendText(currentFigure.ellipseCoords());*/
+
         }
     }
 }

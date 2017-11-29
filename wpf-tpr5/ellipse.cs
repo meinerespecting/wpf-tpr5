@@ -11,29 +11,78 @@ using System.Drawing;
 
 namespace geometry_shapes
 {
+    /*
+     * Контроллер для всех Геометрий.
+     * Обработчики висят на нем.
+     * 
+     * 
+     */
+    public class geometry_controller : UIElement
+    {
+        int count = 0;
+        List<geometry_circle> totalGeometries = new List<geometry_circle>();
+
+        int _x;
+        int _y;
+        int _width;
+        int _height;
+        string _labelText;
+        Canvas _canvas;
+
+        /// <summary>
+        /// arguments
+        /// </summary>
+        /// <param name="x">координата x</param>
+        /// <param name="y">координата y</param>
+        /// <param name="width">ширина</param>
+        /// <param name="height">высота</param>
+        /// <param name="labelText">подпись вершины</param>
+        /// <param name="canvas">ссылка на Canvas</param>
+
+        //saving it's params to add new figures simply
+        public geometry_controller(int x, int y, int width, int height, string labelText, ref Canvas canvas)
+        {
+            _x = x;
+            _y = y;
+            _width = width;
+            _height = height;
+            _labelText = labelText;
+            _canvas = canvas;
+
+            count++;
+            totalGeometries.Add(new geometry_circle(x , y , width , height , labelText , count , ref canvas));
+        }
+        public void addNewFigure(string newLabelText)
+        {
+            count++;
+            totalGeometries.Add(new geometry_circle(_x , _y , _width , _height , newLabelText , count , ref _canvas));
+        }
+
+        private void MouseLeftButtonUp(object sender , MouseButtonEventArgs e)
+        {
+            
+        }
+    }
     public class geometry_circle : UIElement
     {
-        public Ellipse el = null;//экземпляр этого класса, который отрисовывается
+        public Ellipse el = null;
         private Ellipse selectedEllipseForLine = null;
 
         private double _x = 10, _y = 10;
         private double _width = 20, _height = 20;
+        private int count;//for searching in List by this ref
 
         public Label textLabel = null;
 
         public string name = "default name";
-        public string handlerWork = "1";
         private string debugStr = "";
 
-        //Обработка перетягивания
-        bool isPressed = false;
+        private bool isPressed = false;
 
-
-        //private Point innerLine, outerLinePoint1, outerLinePoint2;
         private Point begin, curr;
-        public Line innerLine1 = null;//прорисовка линий для отображения жадного алгоритма
-        public Line outerLine1 = null;
-        public Line outerLine2 = null;
+        private Line innerLine1 = null;
+        private Line outerLine1 = null;
+        private Line outerLine2 = null;
 
         private Canvas currentCanvas = null;//need it for placing ellipses and lines inside the class
         private new void MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -70,14 +119,14 @@ namespace geometry_shapes
             {
                 el = (Ellipse)sender;
                 curr = e.GetPosition(null);
-                el.SetValue(System.Windows.Controls.Canvas.LeftProperty, curr.X - 25);
-                el.SetValue(System.Windows.Controls.Canvas.TopProperty, curr.Y - 25);
+                el.SetValue(Canvas.LeftProperty, curr.X - 25);
+                el.SetValue(Canvas.TopProperty, curr.Y - 25);
                 refreshLabelCoords();//тягаем поганца за собой
             }
 
         }
 
-        private new void MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private new void MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             el = (Ellipse)sender;
             if (isPressed)
@@ -90,7 +139,7 @@ namespace geometry_shapes
 
         }
 
-        public geometry_circle(int x, int y, int height, int width, string labelText, ref Canvas canvas)// 1, 1, this.Handle
+        public geometry_circle(int x, int y, int height, int width, string labelText, int count, ref Canvas canvas)// 1, 1, this.Handle
         {
             el = new Ellipse();
             currentCanvas = canvas;//saves reference to our  canvas for drawing lines
@@ -99,13 +148,14 @@ namespace geometry_shapes
             setFigureCoords(x, y);
 
             name = labelText;
+            this.count = count;//for searching in List<geometries>
             setEllipseSize();
             el.VerticalAlignment = VerticalAlignment.Top;
             el.Fill = Brushes.Green;//заполнили зеленым
             el.Stroke = Brushes.Red;//обвели красным
             el.StrokeThickness = 3;
-            el.SetValue(System.Windows.Controls.Canvas.TopProperty, (double)_y);
-            el.SetValue(System.Windows.Controls.Canvas.LeftProperty, (double)_x);
+            el.SetValue(Canvas.TopProperty, (double)_y);
+            el.SetValue(Canvas.LeftProperty, (double)_x);
             //el.MouseLeftButtonDown += MouseLeftButtonDown;
             el.MouseUp += MouseLeftButtonUp;
             el.MouseLeftButtonDown += MouseLeftButtonDown;
@@ -126,8 +176,8 @@ namespace geometry_shapes
         {
             if (textLabel != null)
             {
-                textLabel.SetValue(System.Windows.Controls.Canvas.LeftProperty, curr.X - 45);
-                textLabel.SetValue(System.Windows.Controls.Canvas.TopProperty, curr.Y - 50);
+                textLabel.SetValue(Canvas.LeftProperty, curr.X - 45);
+                textLabel.SetValue(Canvas.TopProperty, curr.Y - 50);
             }
         }
 
@@ -175,43 +225,24 @@ namespace geometry_shapes
         {
             if (curr.X == 0) curr.X = x;
             if (curr.Y == 0) curr.Y = y ;
-            textLabel.SetValue(System.Windows.Controls.Canvas.LeftProperty, curr.X - 18);
-            textLabel.SetValue(System.Windows.Controls.Canvas.TopProperty, curr.Y - 25);
+            textLabel.SetValue(Canvas.LeftProperty, curr.X - 18);
+            textLabel.SetValue(Canvas.TopProperty, curr.Y - 25);
         }
         private void DrawLineBetweenCoordinates(double x1, double y1, double x2, double y2)
         { 
             debugStr += "\nEntered DrawLineCoords";
             Line myLine = new Line();
 
-            myLine.Stroke = System.Windows.Media.Brushes.Black;
+            myLine.Stroke = Brushes.Black;
             myLine.X1 =  x1;
             myLine.X2 =  y1;
             myLine.Y1 =  x2;
             myLine.Y2 =  y2;
-            /*myLine.HorizontalAlignment = HorizontalAlignment.Left;
-            myLine.VerticalAlignment = VerticalAlignment.Center;*/
             myLine.StrokeThickness = 2;
             currentCanvas.Children.Add(myLine);
 
             myLine.UpdateLayout();
             debugStr += "\nChildren.Add!";
-        }
-        private void DrawLineBetweenEllipses(ref Ellipse el1 ,ref Ellipse el2)/* , ref Canvas canvas)*/
-        {
-            /*debugStr += "\nEntered DrawLine";
-            Line myLine = new Line();
-
-            myLine.Stroke = System.Windows.Media.Brushes.Black;
-            myLine.X1 = (int)(Canvas.GetLeft(el1) + 25.0);
-            myLine.X2 = (int)(Canvas.GetLeft(el2) + 25.0); 
-            myLine.Y1 = (int)(Canvas.GetTop(el1) + 25.0);
-            myLine.Y2 = (int)(Canvas.GetTop(el2) + 25.0);
-            myLine.HorizontalAlignment = HorizontalAlignment.Left;
-            myLine.VerticalAlignment = VerticalAlignment.Center;
-            myLine.StrokeThickness = 2;
-
-            myLine.UpdateLayout();
-            debugStr += "\nChildren.Add!";*/
         }
         public string ellipseCoords()
         {
